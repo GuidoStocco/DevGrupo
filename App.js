@@ -1,12 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import Routes from './src/routes';
+import { NavigationContainer } from '@react-navigation/native';
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Dev Grupo</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer style={styles.container}>
+      <Routes/>
+      <StatusBar barStyle='dark-content' />
+    </NavigationContainer>
   );
 }
 
