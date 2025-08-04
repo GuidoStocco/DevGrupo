@@ -9,6 +9,20 @@ export default function SignIn() {
 
   const [type, setType] = useState(false); 
 
+  function handleLogin() {
+
+    if(type === true){
+      //cadastrar usuario
+
+      console.log("Cadastrando usuário:", {name, email, password});
+    } else{
+      
+      console.log("Acessando conta:", {email, password});
+      //acessar conta
+    }
+
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.logo}>HeyGrupos</Text>
@@ -27,7 +41,9 @@ export default function SignIn() {
           secureTextEntry={true} keyboardType='numeric'
         />
 
-        <TouchableOpacity style={[styles.btn, {backgroundColor: type ? '#34A853' : '#121212'}]} >
+        <TouchableOpacity style={[styles.btn, {backgroundColor: type ? '#34A853' : '#121212'}]} 
+          onPress={handleLogin}
+        >
           <Text style={styles.textBtn}>{type ? "Cadastrar" : "Acessar"}</Text>
         </TouchableOpacity>
 
