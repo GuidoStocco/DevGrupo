@@ -1,8 +1,12 @@
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, Platform, TextInput, TouchableOpacity } from 'react-native';
 
-export default function SignIn() {
+import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
+
+export default function SignIn() {
+  const navigation = useNavigation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
@@ -14,9 +18,27 @@ export default function SignIn() {
     if(type === true){
       //cadastrar usuario
 
+      if(name === '' || email === '' || password === '') return;
+
+      auth().createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+        user.user.updateProfile({
+          displayName: name
+        }).then(() => {
+          navigation.goBack();
+        })
+      })
+      .catch((error) => {
+        if(error.code === 'auth/email-already-in-use'){
+          return;
+        }
+        if(error.code === 'auth/invalid-email'){
+          return;
+        }
+      })
       console.log("Cadastrando usuário:", {name, email, password});
     } else{
-      
+
       console.log("Acessando conta:", {email, password});
       //acessar conta
     }
