@@ -16,8 +16,6 @@ export default function SignIn() {
   function handleLogin() {
 
     if(type === true){
-      //cadastrar usuario
-
       if(name === '' || email === '' || password === '') return;
 
       auth().createUserWithEmailAndPassword(email, password)
