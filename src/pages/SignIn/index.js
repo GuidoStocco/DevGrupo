@@ -36,9 +36,20 @@ export default function SignIn() {
       })
       console.log("Cadastrando usuário:", {name, email, password});
     } else{
-
       console.log("Acessando conta:", {email, password});
-      //acessar conta
+      //logar conta
+      auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((error) => {
+        if(error.code === 'auth/user-not-found'){
+          return;
+        }
+        if(error.code === 'auth/wrong-password'){
+          return;
+        }
+      })
     }
 
   }
