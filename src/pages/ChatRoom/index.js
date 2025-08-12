@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, Button, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import auth from "@react-native-firebase/auth";
+import PlusButton from '../../components/PlusButton';
 
 export default function ChatRoom() {
   const navigation = useNavigation();
+
+  const [modal, setModal] = useState(false);
 
   const handleSignOut = () => {
     auth()
@@ -35,6 +38,8 @@ export default function ChatRoom() {
         </TouchableOpacity>
         
       </View>
+      
+      <PlusButton setVisible={() => setModal(true)}/>
     </SafeAreaView>
   );
 }
