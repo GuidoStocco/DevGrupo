@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function PlusButton({ setVisible }) {
+export default function PlusButton({ setVisible, userStatus }) {
+
+    const navigation = useNavigation();
 
     function handleModal() {
-        setVisible();
+        userStatus ? setVisible() : navigation.navigate("SignIn");
     }
 
     return (
