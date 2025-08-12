@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {Text, View, Button, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import {Text, View, Button, SafeAreaView, FlatList, TouchableOpacity, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import auth from "@react-native-firebase/auth";
 import PlusButton from '../../components/PlusButton';
+import ModalNew from '../../components/ModalNew';
 
 export default function ChatRoom() {
   const navigation = useNavigation();
@@ -40,6 +41,10 @@ export default function ChatRoom() {
       </View>
       
       <PlusButton setVisible={() => setModal(true)}/>
+
+      <Modal visible={modal} animationType="slide" transparent={true}>
+        <ModalNew setVisible={() => setModal(false)}/>
+      </Modal>  
     </SafeAreaView>
   );
 }
