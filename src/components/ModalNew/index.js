@@ -1,9 +1,50 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback } from 'react-native';
+import firestore from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
+
+
 
 export default function ModalNew({ setVisible }) {
 
+    const user = auth().currentUser.toJSON();
+
     const [room, setRoom] = useState('');
+
+    function handleRoom(){
+        if(room === ''){
+            alert('Digite o nome da sala');
+            return;
+        }
+        createRoom();
+    }
+
+    function createRoom() {
+        firestore()
+        .collection('MESSAGE_THREADS')
+        .add({
+            name: room,
+            owner: user.uid,
+            lastMessage:{
+                text: `Bem-vindo(a) ao grupo ${room}`,
+                createdAt: firestore.FieldValue.serverTimestamp(),
+            }
+        })
+        .then((docRef) => { 
+            docRef.collection('MESSAGES').add({
+                text: `Bem-vindo(a) ao grupo ${room}`,
+                createdAt: firestore.FieldValue.serverTimestamp(),
+                system: true,
+            })
+            .then(() => {
+                setVisible();
+            })  
+        })
+        .catch((err) => {
+            console.error("Error creating room: ", err);
+            alert('Erro ao criar sala, tente novamente mais tarde.');
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -21,9 +62,14 @@ export default function ModalNew({ setVisible }) {
                     style={styles.input}
                 />
 
-                <TouchableOpacity style={styles.btnCreate}>
+                <TouchableOpacity style={styles.btnCreate} onPress={handleRoom}>
                     <Text style={styles.btnText}>Criar sala</Text>
                 </TouchableOpacity>
+                
+                <TouchableOpacity style={[styles.btnCreate, { backgroundColor: '#bdbdbd', marginTop: 10 }]} onPress={setVisible}>
+                    <Text style={styles.btnText}>Voltar</Text>
+                </TouchableOpacity>
+
             </View>
         </View>
     );
