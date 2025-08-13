@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, Button, SafeAreaView, FlatList, TouchableOpacity, Modal } from 'react-native';
+import {Text, View, Button, SafeAreaView, FlatList, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import auth from "@react-native-firebase/auth";
 import PlusButton from '../../components/PlusButton';
 import ModalNew from '../../components/ModalNew';
+import firestore from "@react-native-firebase/firestore";
 
 export default function ChatRoom() {
   const navigation = useNavigation();
@@ -13,10 +14,44 @@ export default function ChatRoom() {
   const [modal, setModal] = useState(false);
   const [user, setUser] = useState(null);
 
+  const [threads, setThreads] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const hasUser = auth().currentUser ? auth().currentUser.toJSON() : null;
     console.log("User:", hasUser);
     setUser(hasUser);
+  }, [isFocused])
+
+  useEffect(() => {
+    let isActive = true;
+
+    function getChats(){
+       firestore()
+    .collection('MESSAGE_THREADS')
+    .orderBy('lastMessage.createdAt', 'desc')
+    .limit(10)
+    .get()
+    .then((snapshot) =>{
+      const threads = snapshot.docs.map(doc => {
+        return {
+          _id: doc.id,
+          name: '',
+          lastMessage: { text: '' },
+          ...doc.data()
+        }
+      })
+
+      if(isActive){
+        setThreads(threads);
+        setLoading(false);
+      }
+    })
+  }
+  getChats();
+    return () => { isActive = false; }
+
+    
   }, [isFocused])
 
   const handleSignOut = () => {
@@ -31,6 +66,11 @@ export default function ChatRoom() {
     })
   }
 
+  if(loading){
+    return(
+    <ActivityIndicator size="large" color="#0000ff" />
+  )
+  }
   
   return (
     <SafeAreaView style={styles.container}>
