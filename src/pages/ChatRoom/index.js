@@ -6,6 +6,7 @@ import auth from "@react-native-firebase/auth";
 import PlusButton from '../../components/PlusButton';
 import ModalNew from '../../components/ModalNew';
 import firestore from "@react-native-firebase/firestore";
+import ChatList from '../../components/ChatList';
 
 export default function ChatRoom() {
   const navigation = useNavigation();
@@ -91,6 +92,15 @@ export default function ChatRoom() {
         </TouchableOpacity>
         
       </View>
+
+      <FlatList
+        data={threads}
+        keyExtractor={item => item._id}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}) => (
+          <ChatList data={item}/>
+        )}
+      />
       
       <PlusButton setVisible={() => setModal(true)} userStatus={user}/>
 
@@ -106,6 +116,7 @@ export default function ChatRoom() {
 const styles = {
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   headerRoom:{
     flexDirection: 'row',
