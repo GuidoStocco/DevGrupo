@@ -5,7 +5,7 @@ import auth from "@react-native-firebase/auth";
 
 
 
-export default function ModalNew({ setVisible }) {
+export default function ModalNew({ setVisible, setUpdateScreen }) {
 
     const user = auth().currentUser.toJSON();
 
@@ -38,6 +38,7 @@ export default function ModalNew({ setVisible }) {
             })
             .then(() => {
                 setVisible();
+                setUpdateScreen();
             })  
         })
         .catch((err) => {
