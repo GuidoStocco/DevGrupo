@@ -16,7 +16,26 @@ export default function ModalNew({ setVisible, setUpdateScreen }) {
             alert('Digite o nome da sala');
             return;
         }
-        createRoom();
+
+        firestore()
+        .collection('MESSAGE_THREADS')
+        .get()
+        .then((snapshot) => {
+            let roomThreds = 0
+
+            snapshot.docs.map(docItem => {
+                if(docItem.data().owner === user.uid) {
+                    roomThreds += 1;
+                    
+                }
+
+                if(roomThreds >= 4) {
+                    alert('Você já possui 4 grupos, exclua um grupo para criar um novo.');             
+                } else {
+                    createRoom();
+                }
+            })
+        })      
     }
 
     function createRoom() {
