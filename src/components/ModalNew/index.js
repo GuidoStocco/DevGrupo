@@ -30,7 +30,8 @@ export default function ModalNew({ setVisible, setUpdateScreen }) {
                 }
 
                 if(roomThreds >= 4) {
-                    alert('Você já possui 4 grupos, exclua um grupo para criar um novo.');             
+                    return alert('Você já possui 4 grupos, exclua um grupo para criar um novo.');      
+                           
                 } else {
                     createRoom();
                 }

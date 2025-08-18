@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function ChatList({data}) {
+export default function ChatList({data, deleteRoom}) {
  return (
-   <TouchableOpacity>
+   <TouchableOpacity onPress={() => {}} delayLongPress={500} onLongPress={() => deleteRoom && deleteRoom()}>
         <View style={styles.row}>
             <View style={styles.content}>
                 <View style={styles.header}>

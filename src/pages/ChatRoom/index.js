@@ -68,6 +68,26 @@ export default function ChatRoom() {
     })
   }
 
+  function deleteRoom(owner, id) {
+
+    
+
+    if(user.uid === owner) {
+      firestore()
+      .collection('MESSAGE_THREADS')
+      .doc(id)
+      .delete()
+      .then(() => {
+        setUpdateScreen(!updateScreen);
+      })
+      .catch((err) => {
+        console.error("Error deleting room: ", err);
+      });
+    } else {
+      alert("Apenas o criador do grupo pode deletá-lo.");
+    }
+  }
+
   if(loading){
     return(
     <ActivityIndicator size="large" color="#0000ff" />
@@ -99,7 +119,7 @@ export default function ChatRoom() {
         keyExtractor={item => item._id}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
-          <ChatList data={item}/>
+          <ChatList data={item}  deleteRoom={() => deleteRoom(item.owner ,item._id)}/>
         )}
       />
       
